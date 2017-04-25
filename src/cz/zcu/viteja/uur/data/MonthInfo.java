@@ -6,9 +6,9 @@ public class MonthInfo {
 	private int monthDays;
 	private int nextMonthDays;
 
-	private String[] data;
+	private String[][] data;
 
-	public MonthInfo(String[] data, int previousMonthDays, int monthDays, int nextMonthDays) {
+	public MonthInfo(String[][] data, int previousMonthDays, int monthDays, int nextMonthDays) {
 		this.data = data;
 		this.previousMonthDays = previousMonthDays;
 		this.monthDays = monthDays;
@@ -27,7 +27,7 @@ public class MonthInfo {
 		return nextMonthDays;
 	}
 
-	public String[] getData() {
+	public String[][] getData() {
 		return data;
 	}
 
