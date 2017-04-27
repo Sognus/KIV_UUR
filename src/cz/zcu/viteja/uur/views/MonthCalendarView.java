@@ -1,7 +1,6 @@
 package cz.zcu.viteja.uur.views;
 
 import cz.zcu.viteja.uur.data.DateUtils;
-import cz.zcu.viteja.uur.main.Main;
 import cz.zcu.viteja.uur.views.calendar.MonthCalendarGrid;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +22,8 @@ public class MonthCalendarView extends View {
 	private Scene scene;
 
 	private BorderPane mainPane;
+	private GridPane mainGrid;
+	private VBox mainBox;
 
 	// Ovládá který mìsíc se bude zobrazovat
 	private int workYear;
@@ -70,6 +71,8 @@ public class MonthCalendarView extends View {
 		MonthCalendarGrid cg = new MonthCalendarGrid(this.workYear, this.workMonth);
 		GridPane gp = cg.setup();
 
+		this.mainGrid = gp;
+
 		Button previous = new Button();
 		previous.setText(DateUtils.getMonthName(this.workMonth - 1));
 
@@ -87,8 +90,11 @@ public class MonthCalendarView extends View {
 
 				System.out.println(String.format("%d-%d", workMonth, workYear));
 
-				Scene newScene = setup();
-				Main.getInstance().setScene(newScene);
+				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
+				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
+				MonthCalendarView.getInstance().mainBox.getChildren().remove(currentInstance.mainGrid);
+				currentInstance.mainGrid = newPane;
+				MonthCalendarView.getInstance().mainBox.getChildren().add(newPane);
 				;
 
 			}
@@ -111,9 +117,11 @@ public class MonthCalendarView extends View {
 
 				System.out.println(String.format("%d-%d", workMonth, workYear));
 
-				Scene newScene = setup();
-				Main.getInstance().setScene(newScene);
-				;
+				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
+				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
+				MonthCalendarView.getInstance().mainBox.getChildren().remove(currentInstance.mainGrid);
+				currentInstance.mainGrid = newPane;
+				MonthCalendarView.getInstance().mainBox.getChildren().add(newPane);
 
 			}
 		});
@@ -142,6 +150,9 @@ public class MonthCalendarView extends View {
 
 		// Nastavení vBox
 		vBox.setAlignment(Pos.CENTER);
+
+		// Nastavit referenci
+		this.mainBox = vBox;
 
 		return vBox;
 	}
