@@ -20,6 +20,10 @@ public class DateUtils {
 
 	}
 
+	public static int getCurrentDay() {
+		return cal.get(Calendar.DATE);
+	}
+
 	public static String getMonthName(int monthIndex) {
 		if (monthIndex < 1) {
 			monthIndex = 12;
@@ -29,6 +33,31 @@ public class DateUtils {
 			monthIndex = 1;
 		}
 
-		return monthNames[monthIndex];
+		// return monthNames[monthIndex];
+		return adjustMonthNameToLongest(monthNames[monthIndex]);
+	}
+
+	private static String adjustMonthNameToLongest(String month) {
+		int longest = -1;
+
+		for (String s : monthNames) {
+			if (s.length() > longest)
+				longest = s.length();
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(month);
+
+		boolean append = true;
+		while (longest - sb.length() >= 0) {
+			if (append) {
+				sb.append(" ");
+			} else {
+				sb.insert(0, " ");
+			}
+			append = !append;
+		}
+
+		return sb.toString();
 	}
 }

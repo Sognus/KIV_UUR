@@ -4,12 +4,10 @@ import cz.zcu.viteja.uur.data.DateUtils;
 import cz.zcu.viteja.uur.views.calendar.MonthCalendarGrid;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -45,7 +43,7 @@ public class MonthCalendarView extends View {
 		this.mainPane.setRight(this.setupRight());
 		this.mainPane.setBottom(this.setupBottom());
 
-		this.scene = new Scene(mainPane, 350, 300);
+		this.scene = new Scene(mainPane, 600, 600);
 
 		return this.scene;
 	}
@@ -73,8 +71,18 @@ public class MonthCalendarView extends View {
 
 		this.mainGrid = gp;
 
+		// Label
+		Button labelButton = new Button();
+
+		labelButton.setText(String.format("%s %d", DateUtils.getMonthName(this.workMonth), this.workYear));
+
+		// Tlaèítko - pøedchozí mìsíc
 		Button previous = new Button();
 		previous.setText(DateUtils.getMonthName(this.workMonth - 1));
+
+		// Tlaèítko - následující mìsíc
+		Button next = new Button();
+		next.setText(DateUtils.getMonthName(this.workMonth + 1));
 
 		previous.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -86,22 +94,22 @@ public class MonthCalendarView extends View {
 					workMonth = 12;
 				}
 
-				previous.setText(DateUtils.getMonthName(workMonth));
-
 				System.out.println(String.format("%d-%d", workMonth, workYear));
 
 				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
 				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
-				MonthCalendarView.getInstance().mainBox.getChildren().remove(currentInstance.mainGrid);
+				currentInstance.mainBox.getChildren().remove(currentInstance.mainGrid);
 				currentInstance.mainGrid = newPane;
-				MonthCalendarView.getInstance().mainBox.getChildren().add(newPane);
-				;
+				currentInstance.mainBox.getChildren().add(newPane);
+
+				next.setText(DateUtils.getMonthName(workMonth + 1));
+				previous.setText(DateUtils.getMonthName(workMonth - 1));
+
+				labelButton.setText(String.format("%s %d", DateUtils.getMonthName(currentInstance.workMonth),
+						currentInstance.workYear));
 
 			}
 		});
-
-		Button next = new Button();
-		next.setText(DateUtils.getMonthName(this.workMonth + 1));
 
 		next.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -113,43 +121,43 @@ public class MonthCalendarView extends View {
 					workMonth = 1;
 				}
 
-				next.setText(DateUtils.getMonthName(workMonth));
-
 				System.out.println(String.format("%d-%d", workMonth, workYear));
 
 				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
 				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
-				MonthCalendarView.getInstance().mainBox.getChildren().remove(currentInstance.mainGrid);
+				currentInstance.mainBox.getChildren().remove(currentInstance.mainGrid);
 				currentInstance.mainGrid = newPane;
-				MonthCalendarView.getInstance().mainBox.getChildren().add(newPane);
+				currentInstance.mainBox.getChildren().add(newPane);
+
+				next.setText(DateUtils.getMonthName(workMonth + 1));
+				previous.setText(DateUtils.getMonthName(workMonth - 1));
+
+				labelButton.setText(String.format("%s %d", DateUtils.getMonthName(currentInstance.workMonth),
+						currentInstance.workYear));
 
 			}
 		});
 
-		// Label
-		Label label = new Label();
-
-		label.setText(String.format("%s %d", DateUtils.getMonthName(this.workMonth), this.workYear));
-
-		// Stack panes
+		previous.getStyleClass().add("month-button-control");
+		next.getStyleClass().add("month-button-control");
+		labelButton.getStyleClass().add("month-label-control");
 
 		// hBox
 		HBox hBox = new HBox();
 		hBox.getChildren().add(previous);
-		hBox.getChildren().add(label);
+		hBox.getChildren().add(labelButton);
 		hBox.getChildren().add(next);
 		hBox.setAlignment(Pos.CENTER);
 		hBox.setSpacing(25);
-
-		hBox.setPadding(new Insets(0, 30, 0, 30));
 
 		// VBox
 		VBox vBox = new VBox();
 		vBox.getChildren().add(hBox);
 		vBox.getChildren().add(gp);
 
-		// Nastavení vBox
+		// Nastavení
 		vBox.setAlignment(Pos.CENTER);
+		gp.setMinWidth(gp.getPrefWidth());
 
 		// Nastavit referenci
 		this.mainBox = vBox;
