@@ -11,6 +11,9 @@ public class DateUtils {
 	public static String[] monthNames = { "", "Leden", "Únor", "Bøezen", "Duben", "Kvìten", "Èerven", "Èervenec",
 			"Srpen", "Záøí", "Øíjen", "Listopad", "Prosinec" };
 
+	public static String[] monthNamesZero = { "Leden", "Únor", "Bøezen", "Duben", "Kvìten", "Èerven", "Èervenec",
+			"Srpen", "Záøí", "Øíjen", "Listopad", "Prosinec" };
+
 	public static int getCurrentYear() {
 		return cal.get(Calendar.YEAR);
 	}
@@ -59,5 +62,31 @@ public class DateUtils {
 		}
 
 		return sb.toString();
+	}
+
+	public static String[] getMonthNames() {
+		return monthNames;
+	}
+
+	public static String[] getMonthNamesFromZero() {
+		return monthNamesZero;
+	}
+
+	public static int getMonthIndexByName(String name) {
+		for (int a = 0; a < monthNames.length; a++) {
+			if (name.toLowerCase().equals(monthNames[a].toLowerCase())) {
+				return a;
+			}
+		}
+		return 0;
+	}
+
+	public static int getMonthIndexFromZeroByName(String name) {
+		for (int a = 1; a <= monthNamesZero.length; a++) {
+			if (name.toLowerCase().equals(monthNames[a].toLowerCase())) {
+				return a;
+			}
+		}
+		return 0;
 	}
 }

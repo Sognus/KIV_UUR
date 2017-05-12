@@ -2,7 +2,7 @@ package cz.zcu.viteja.uur.views;
 
 import cz.zcu.viteja.uur.data.DateUtils;
 import cz.zcu.viteja.uur.main.Main;
-import cz.zcu.viteja.uur.views.calendar.MonthCalendarGrid;
+import cz.zcu.viteja.uur.views.calendar.YearCalendarGrid;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -14,9 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class MonthCalendarView extends View {
+public class YearCalendarView extends View {
 
-	private static MonthCalendarView instance = null;
+	private static YearCalendarView instance = null;
 
 	private Scene scene;
 
@@ -24,14 +24,18 @@ public class MonthCalendarView extends View {
 	private GridPane mainGrid;
 	private VBox mainBox;
 
-	// Ovládá který mìsíc se bude zobrazovat
+	// Ovládá rok a mìsíc, který se bude zobrazovat = aktuální rok + mìsíc
 	private int workYear;
 	private int workMonth;
 
-	protected MonthCalendarView() {
+	protected YearCalendarView() {
 		this.workYear = DateUtils.getCurrentYear();
 		this.workMonth = DateUtils.getCurrentMonth();
 
+	}
+
+	public void setWorkYear(int workYear) {
+		this.workYear = workYear;
 	}
 
 	@Override
@@ -44,30 +48,32 @@ public class MonthCalendarView extends View {
 		this.mainPane.setRight(this.setupRight());
 		this.mainPane.setBottom(this.setupBottom());
 
-		this.scene = new Scene(mainPane, 650, 685);
+		this.scene = new Scene(mainPane, 800, 425);
 
 		return this.scene;
 	}
 
 	@Override
 	protected Node setupTop() {
-
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Node setupLeft() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Node setupRight() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Node setupCenter() {
-		MonthCalendarGrid cg = new MonthCalendarGrid(this.workYear, this.workMonth);
+		YearCalendarGrid cg = new YearCalendarGrid(this.workYear);
 		GridPane gp = cg.setup();
 
 		this.mainGrid = gp;
@@ -75,39 +81,33 @@ public class MonthCalendarView extends View {
 		// Label
 		Button labelButton = new Button();
 
-		labelButton.setText(String.format("%s %d", DateUtils.getMonthName(this.workMonth), this.workYear));
+		labelButton.setText(String.format("%d", this.workYear));
 
-		// Tlaèítko - pøedchozí mìsíc
+		// Tlaèítko - pøedchozí rok
 		Button previous = new Button();
-		previous.setText(DateUtils.getMonthName(this.workMonth - 1));
+		previous.setText(String.format("%d", this.workYear - 1));
 
-		// Tlaèítko - následující mìsíc
+		// Tlaèítko - následující rok
 		Button next = new Button();
-		next.setText(DateUtils.getMonthName(this.workMonth + 1));
+		next.setText(String.format("%d", this.workYear + 1));
 
 		previous.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				workMonth--;
+				workYear--;
 
-				if (workMonth == 0) {
-					workYear--;
-					workMonth = 12;
-				}
+				System.out.println(String.format("%d", workYear));
 
-				System.out.println(String.format("%d-%d", workMonth, workYear));
-
-				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
-				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
+				GridPane newPane = new YearCalendarGrid(workYear).setup();
+				YearCalendarView currentInstance = YearCalendarView.getInstance();
 				currentInstance.mainBox.getChildren().remove(currentInstance.mainGrid);
 				currentInstance.mainGrid = newPane;
 				currentInstance.mainBox.getChildren().add(newPane);
 
-				next.setText(DateUtils.getMonthName(workMonth + 1));
-				previous.setText(DateUtils.getMonthName(workMonth - 1));
+				next.setText(String.format("%d", currentInstance.workYear + 1));
+				previous.setText(String.format("%d", workYear - 1));
 
-				labelButton.setText(String.format("%s %d", DateUtils.getMonthName(currentInstance.workMonth),
-						currentInstance.workYear));
+				labelButton.setText(String.format("%d", currentInstance.workYear));
 
 			}
 		});
@@ -115,37 +115,30 @@ public class MonthCalendarView extends View {
 		next.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				workMonth++;
+				workYear++;
 
-				if (workMonth > 12) {
-					workYear++;
-					workMonth = 1;
-				}
+				System.out.println(String.format("%d", workYear));
 
-				System.out.println(String.format("%d-%d", workMonth, workYear));
-
-				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
-				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
+				GridPane newPane = new YearCalendarGrid(workYear).setup();
+				YearCalendarView currentInstance = YearCalendarView.getInstance();
 				currentInstance.mainBox.getChildren().remove(currentInstance.mainGrid);
 				currentInstance.mainGrid = newPane;
 				currentInstance.mainBox.getChildren().add(newPane);
 
-				next.setText(DateUtils.getMonthName(workMonth + 1));
-				previous.setText(DateUtils.getMonthName(workMonth - 1));
+				next.setText(String.format("%d", currentInstance.workYear + 1));
+				previous.setText(String.format("%d", workYear - 1));
 
-				labelButton.setText(String.format("%s %d", DateUtils.getMonthName(currentInstance.workMonth),
-						currentInstance.workYear));
-
+				labelButton.setText(String.format("%d", currentInstance.workYear));
 			}
 		});
 
 		labelButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				int desiredYear = MonthCalendarView.getInstance().workYear;
+
 				YearCalendarView yearView = YearCalendarView.getInstance();
-				yearView.setWorkYear(desiredYear);
-				Scene desiredScene = YearCalendarView.getInstance().setup();
+				yearView.workYear = DateUtils.getCurrentYear();
+				Scene desiredScene = yearView.setup();
 
 				Main.getInstance().setScene(desiredScene);
 			}
@@ -167,7 +160,7 @@ public class MonthCalendarView extends View {
 		VBox vBox = new VBox();
 		vBox.getChildren().add(hBox);
 		vBox.getChildren().add(gp);
-		vBox.setSpacing(25);
+		vBox.setSpacing(20);
 
 		// Nastavení
 		vBox.setAlignment(Pos.TOP_CENTER);
@@ -181,18 +174,14 @@ public class MonthCalendarView extends View {
 
 	@Override
 	protected Node setupBottom() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void setRenderDate(int year, int month) {
-		this.workYear = year;
-		this.workMonth = month;
-	}
-
 	// STATIC
-	public static MonthCalendarView getInstance() {
+	public static YearCalendarView getInstance() {
 		if (instance == null) {
-			instance = new MonthCalendarView();
+			instance = new YearCalendarView();
 		}
 		return instance;
 	}

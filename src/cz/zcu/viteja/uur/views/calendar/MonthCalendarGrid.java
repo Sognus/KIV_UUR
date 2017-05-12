@@ -5,10 +5,9 @@ import cz.zcu.viteja.uur.data.MonthCalendarData;
 import cz.zcu.viteja.uur.data.MonthInfo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 public class MonthCalendarGrid {
 
@@ -40,51 +39,58 @@ public class MonthCalendarGrid {
 
 		// Naplnìní gridlayoutu daty
 		int total = 0;
+		String prevData = "";
 		boolean seda = false;
 		for (int a = 0; a < data.length; a++) {
 			for (int b = 0; b < data[a].length; b++) {
-				StackPane sp = new StackPane();
-				Text text = new Text();
-				text.setText(data[a][b]);
+				String currentData = data[a][b] == null ? "null" : data[a][b].trim();
 
-				if (text.getText().equalsIgnoreCase("1")) {
+				if (currentData == "null")
+					continue;
+
+				StackPane sp = new StackPane();
+				Button text = new Button();
+
+				String textForSet = currentData.length() < 2 ? " " + currentData : currentData;
+
+				text.setText(textForSet);
+
+				if (currentData.equalsIgnoreCase("1")) {
 					seda = !seda;
 				}
-
 				if (seda == true) {
-					text.setFill(Color.GREY);
+					// text.setFill(Color.GREY);
+					text.getStyleClass().add("month-grid-button-not-this-month");
 				} else {
-					text.setFill(Color.WHITE);
+					text.getStyleClass().add("month-grid-button-this-month");
 				}
 
 				sp.getChildren().add(text);
 				sp.setPadding(new Insets(3));
 
 				if (DateUtils.getCurrentMonth() == this.workMonth && DateUtils.getCurrentYear() == this.workYear
-						&& text.getText().equalsIgnoreCase(String.valueOf(DateUtils.getCurrentDay()))
-						&& text.getFill() != Color.GREY) {
-					sp.setStyle("-fx-background-color: derive(blue, 50%);");
-					// sp.setStyle("-fx-background-fill: cyan;");
+						&& currentData.equalsIgnoreCase(String.valueOf(DateUtils.getCurrentDay()))
+						&& seda == false /* text.getFill() != Color.GREY */) {
+					text.getStyleClass().add("month-grid-button-current");
 				}
 
-				// System.out.println(dataMessenger.getCurrentMonthDayCount());
-
 				this.mainPane.add(sp, b, a);
-				// this.mainPane.setHgrow(sp, Priority.ALWAYS);
-				// this.mainPane.setVgrow(sp, Priority.ALWAYS);
 
-				if (text.getText().equalsIgnoreCase("Ne")) {
+				if (currentData.equalsIgnoreCase("Ne")) {
 					seda = !seda;
 				}
 
+				text.getStyleClass().add("month-grid-button");
+
+				prevData = currentData;
 				total++;
 			}
 		}
 
 		// Další nastavení
-		this.mainPane.setPadding(new Insets(10, 30, 0, 30));
-		this.mainPane.setVgap(20);
-		this.mainPane.setHgap(20);
+		this.mainPane.setPadding(new Insets(10, 30, 0, 20));
+		this.mainPane.setVgap(5);
+		this.mainPane.setHgap(5);
 		this.mainPane.setAlignment(Pos.CENTER);
 
 		return this.mainPane;

@@ -40,7 +40,10 @@ public class Main extends Application {
 	}
 
 	public void setScene(Scene newScene) {
+		File f = new File("resources/flat-theme.css");
+		newScene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 		this.primaryStage.setScene(newScene);
+
 		this.primaryStage.show();
 	}
 
