@@ -33,7 +33,7 @@ public class AgendaEvent {
 
 	public StringProperty getDateColumn() {
 		return new SimpleStringProperty(
-				String.format("%s, %s. %s", localizedDayName, numericDayValue, localizedMonthName));
+				String.format("%s, %s. %s%s", localizedDayName, numericDayValue, localizedMonthName, year));
 	}
 
 	public StringProperty getHourColumn() {

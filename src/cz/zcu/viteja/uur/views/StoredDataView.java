@@ -181,6 +181,8 @@ public class StoredDataView extends View {
 
 					}
 
+					Main.getInstance().data.updateList();
+
 					StoredDataView sdw = StoredDataView.getInstance();
 					Scene s = sdw.setup();
 					Main.getInstance().setScene(s);

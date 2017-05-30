@@ -2,6 +2,7 @@ package cz.zcu.viteja.uur.data.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Database {
 
@@ -59,6 +60,23 @@ public class Database {
 
 		this.list.remove(event);
 
+	}
+
+	public void updateList() {
+
+		ArrayList<DayEvent> newList = new ArrayList<DayEvent>();
+
+		for (Entry<Integer, YearEvents> entryA : this.data.entrySet()) {
+			for (Entry<Integer, MonthEvents> entryB : entryA.getValue().getMonthEvents().entrySet()) {
+				for (Entry<Integer, DayEvents> entryC : entryB.getValue().getDayEvents().entrySet()) {
+					for (DayEvent de : entryC.getValue().getDayEvents()) {
+						newList.add(de);
+					}
+				}
+			}
+		}
+
+		this.list = newList;
 	}
 
 	private YearEvents getYearEvents(int year) {
