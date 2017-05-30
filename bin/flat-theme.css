@@ -6,6 +6,12 @@
  ******************************************************************************/
 
 
+
+.rootPane
+{
+	-fx-background-color: -dark;
+}
+
 .root {
     -fx-text-base-color: rgb(252.0, 240.0, 237.0);
     -fx-text-fill: -fx-text-base-color;
@@ -19,6 +25,7 @@
     -fx-font-weight: 600;
     -fx-disabled-opacity: 0.6; 
     
+    -flatter-green:  derive(green, 50%);
     -flatter-purple:derive(rgb(104.0, 33.0, 122.0), 20%);
     -flatter-red: rgb(237.0, 68.0, 37.0);
     -flatter-blue: rgb(0.0, 184.0, 222.0);
@@ -182,9 +189,6 @@
  * ComboBox                                                                    *
  *                                                                             *
  ******************************************************************************/
-.combo-box-base {
-    -fx-skin: "com.guigarage.flatterfx.skin.FlatterComboBoxSkin";
-}
 
 .popup-overlay {
     -fx-background-color: -flatter-purple;
@@ -417,6 +421,273 @@
 }
 
 
+
+
+/*******************************************************************************
+ *                                                                             *
+ * DatePicker                                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.date-picker > .arrow-button > .arrow {
+    -fx-shape: "M0,0v9h9V0H0z M2,8H1V7h1V8z M2,6H1V5h1V6z M2,4H1V3h1V4z M4,8H3V7h1V8z M4,6H3V5h1V6z M4,4H3V3h1V4z M6,8H5V7h1V8z M6,6H5 V5h1V6z M6,4H5V3h1V4z M8,8H7V7h1V8z M8,6H7V5h1V6z M8,4H7V3h1V4z";
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.416667em 0.416667em 0.333333em 0.333333em; /*5 5 4 4 */
+    -fx-scale-shape: true;
+}
+
+.date-picker-popup {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    /*-fx-background-radius: 0 6 6 6, 0 5 5 5;*/
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-alignment: CENTER; /* VBox */
+    -fx-spacing: 0; /* VBox */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+.date-picker-popup > .month-year-pane {
+    -fx-padding: 0.5em; /* 6 6 6 6 */
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0;
+}
+.date-picker-popup > * > .spinner {
+    -fx-spacing: 0.25em;
+    -fx-alignment: CENTER;
+    -fx-fill-height: false;
+}
+.date-picker-popup > * > .spinner > .button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+.date-picker-popup > * > .spinner > .button:hover {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 3, 2, 1;
+}
+.date-picker-popup > * > .spinner > .button:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-focus-color, -fx-body-color;
+    -fx-background-radius: 3, 2, 1;
+}
+.date-picker-popup > * > .spinner > .left-button {
+    -fx-padding: 0 0.333333em 0 0.25em; /* 0 4 0 3 */
+}
+.date-picker-popup > * > .spinner > .right-button {
+    -fx-padding: 0 0.25em 0 0.333333em; /* 0 3 0 4 */
+}
+.date-picker-popup > * > .spinner > .button > .right-arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.5em 0.333333em 0 0; /* 6 4 0 0 */
+    -fx-shape: "M 4 0 L 0 -3 L 0 3 z";
+    -fx-scale-shape: true;
+}
+.date-picker-popup > * > .spinner > .button > .left-arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.5em 0.333333em 0 0; /* 6 4 0 0 */
+    -fx-shape: "M 0 0 L 4 -3 L 4 3 z";
+    -fx-scale-shape: true;
+}
+.date-picker-popup > * > .spinner > .label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: black;
+}
+.date-picker-popup > .month-year-pane > .secondary-label {
+    -fx-alignment: BASELINE_CENTER;
+    -fx-padding: 0.5em 0 0 0; /* 6 0 0 0 */
+    -fx-text-fill: black;
+}
+.date-picker-popup > .calendar-grid {
+    -fx-background-color: derive(-fx-base, 6.8%);
+    -fx-background-insets: 1;
+    -fx-padding: 1;
+}
+.date-picker-popup > * > .date-cell {
+    -fx-background-color: transparent;
+    -fx-background-insets: 1, 2;
+    -fx-padding: 0.166667em;
+    -fx-alignment: BASELINE_CENTER;
+    -fx-opacity: 1.0;
+}
+.date-cell:disabled > * {
+    -fx-opacity: -fx-disabled-opacity;
+}
+.date-picker-popup > * > .day-name-cell,
+.date-picker-popup > * > .week-number-cell {
+    -fx-font-size: 0.916667em;
+  
+}
+.date-picker-popup > * > .week-number-cell {
+    /* Add one pixel to the top padding to
+     * compensate for the smaller font size. */
+    -fx-padding: 0.416667em 0.583333em 0.333333em 0.583333em; /* 5 7 4 7 */
+    -fx-border-color: -fx-background;
+    -fx-border-width: 0px;
+    -fx-background: -fx-control-inner-background;
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-accent;
+    -fx-background-color: transparent;
+}
+.date-picker-popup > * > .day-cell {
+    -fx-padding: 0.333333em 0.583333em 0.333333em 0.583333em; /* 4 7 4 7 */
+    -fx-border-color: derive(-fx-control-inner-background,-10%);
+    -fx-border-width: 1px;
+    -fx-background: -fx-control-inner-background;
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-text-background-color;
+}
+.date-picker-popup > * > .hijrah-day-cell {
+    -fx-alignment: TOP_LEFT;
+    -fx-padding: 0.083333em 0.333333em 0.083333em 0.333333em; /* 1 4 1 4 */
+    -fx-cell-size: 2.75em;
+}
+.date-picker-popup > * > .day-cell > .secondary-text {
+    -fx-fill: firebrick;
+}
+.date-picker-popup > * > .today {
+    -fx-background-color: -fx-control-inner-background, derive(-fx-base, -10%), -fx-control-inner-background;
+    -fx-background-insets: 1, 2, 3;
+}
+.date-picker-popup > * > .day-cell:hover,
+.date-picker-popup > * > .selected,
+.date-picker-popup > * > .previous-month.selected,
+.date-picker-popup > * > .next-month.selected {
+    -fx-background-color: -fx-selection-bar;
+    -fx-background: -fx-accent;
+}
+.date-picker-popup > * > .today:hover,
+.date-picker-popup > * > .today.selected {
+    -fx-background-color: -fx-selection-bar, derive(-fx-base, -10%),-fx-selection-bar;
+}
+.date-picker-popup > * > .day-cell:focused,
+.date-picker-popup > * > .today:focused {
+    -fx-background-color: -fx-control-inner-background, -fx-cell-focus-inner-border, -fx-control-inner-background;
+    -fx-background-insets: 1, 2, 3;
+}
+.date-picker-popup > * > .day-cell:focused:hover,
+.date-picker-popup > * > .today:focused:hover,
+.date-picker-popup > * > .today.selected:focused,
+.date-picker-popup > * > .selected:focused {
+    -fx-background-color: -fx-selection-bar, -fx-cell-focus-inner-border, -fx-selection-bar;
+}
+.date-picker-popup > * > .previous-month,
+.date-picker-popup > * > .next-month {
+    -fx-background: derive(-fx-control-inner-background,-5%);
+}
+.date-picker-popup > * > .previous-month:hover,
+.date-picker-popup > * > .next-month:hover {
+    -fx-background: lightgrey;
+    -fx-text-fill: -fx-dark-text-color;
+}
+.date-picker-popup > * > .day-cell:hover > .secondary-text,
+.date-picker-popup > * > .previous-month > .secondary-text,
+.date-picker-popup > * > .next-month > .secondary-text,
+.date-picker-popup > * > .selected > .secondary-text {
+    -fx-fill: -fx-text-background-color;
+}
+.date-picker-popup > * > .previous-month.today,
+.date-picker-popup > * > .next-month.today {
+    -fx-background-color: derive(-fx-control-inner-background,-5%), derive(-fx-base, -10%), derive(-fx-control-inner-background,-5%);
+}
+.date-picker-popup > * > .previous-month.today:hover,
+.date-picker-popup > * > .next-month.today:hover {
+    -fx-background-color: lightgrey, derive(-fx-base, -10%), lightgrey;
+}
+
+/* ------- TEXTBOX SEGMENT OF COMBO BOX ------- */
+/*--- The editable ComboBox TextBox inherits its properties from the TextBox Control.
+Only the properties with values that are different from the TextBox are specified here. ---*/
+
+.combo-box-base:editable > .text-field,
+.date-picker > .text-field {
+    -fx-padding: 0.166667em 0.416667em 0.25em 0.416667em; /* 2 5 3 5 */
+    /*-fx-padding: 0px;*/
+    /*-fx-background-color: yellow;*/
+    -fx-background-radius: 4 0 0 4, 3 0 0 3, 2 0 0 2;
+    -fx-background-insets: 0 0 -1 0, 0, 1 0 1 1;
+}
+
+.combo-box-base:editable:contains-focus,
+.date-picker:contains-focus {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-control-inner-background;
+    -fx-background-radius: 5.4, 3, 2;
+    -fx-background-insets: -1.4, 0, 1;
+}
+
+/* -------------- STYLES FOR THE DEFAULT LISTVIEW-BASED COMBOBOX ------------- */
+
+/* Customise the ListCell that appears in the ComboBox button itself */
+.combo-box > .list-cell {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 0.25em 0 0.166667em 0.583333em; /* 3 0 2 7 */
+    -fx-cell-size: 1.7500em; /* 21 */
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 4 0 4 5;
+    
+    /* No alternate highlighting */
+    -fx-background-color: -fx-control-inner-background;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected, 
+.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-background-color: -fx-cell-hover-color;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.combo-box-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
+}
+
+/* -------------------------- STYLES FOR THE COLOR-PICKER CONTROL ----- */
+
+.color-picker {
+    -fx-color-rect-width: 0.916667em; /* 11px */
+    -fx-color-rect-height: 0.916667em; /* 11px */
+}
+.color-picker > .arrow-button {
+    -fx-background-color: null;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 5 5 0, 0 4 4 0, 0 3 3 0;
+}
+
+.combo-box-base.color-picker.split-button > .arrow-button {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 5 5 0, 0 4 4 0, 0 3 3 0;
+    -fx-padding: 0.5em 0.416667em 0.5em 0.416667em; /* 6 5 6 5 */
+}
+
+.color-picker:hover {
+    -fx-color: -fx-base;
+}
+
+/** Fix for RT-35422 where border was being shown incorrectly on non-split-buttons */
+.combo-box-base.color-picker:hover > .arrow-button {
+    -fx-background-insets: 0, 1 1 1 0, 2 2 2 0;
+}
+
+
+
+
+
 /*******************************************************************************
  *                                                                             *
  * Sognus CSS                                                                  *
@@ -440,6 +711,11 @@
      -fx-background-color: transparent;
 }
 
+.month-label-control:selected:focused
+{
+ -fx-text-fill: -flatter-green;
+}
+
 .month-grid-button
 {
 	 -fx-border-color: transparent;
@@ -449,8 +725,10 @@
      -fx-alignment: Center;
 }
 
+
 .month-grid-button:focused{
        -fx-background-color: transparent;
+       -fx-text-fill: -flatter-green;
 }
 
 .month-grid-button:hover{
@@ -475,17 +753,18 @@
 
 .month-label-control:focused{
        -fx-background-color: transparent;
+   -fx-text-fill: derive(-flatter-purple, 75.0%);;
 }
 
 .month-label-control:hover{
        -fx-background-color: transparent;
-              -fx-text-fill: -flatter-red;
+              -fx-text-fill: derive(-flatter-purple, 75.0%);;
 }
 
 .month-label-control:focused:selected {
        -fx-background-color: transparent;
        -fx-background-insets: 0.0, 0.2em;
-       -fx-text-fill: -flatter-red;
+       -fx-text-fill: derive(-flatter-purple, 75.0%);;
 }
 
 .month-label-control:armed,
@@ -530,6 +809,13 @@
 {
 	-fx-text-fill: -flatter-red;
 	
+}
+
+
+.month-grid-button-has-event
+{
+	-fx-border-color: #FFDEAD;
+    -fx-border-width: 2px;	
 }
 
 

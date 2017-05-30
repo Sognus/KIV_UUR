@@ -4,12 +4,12 @@ import cz.zcu.viteja.uur.data.DateUtils;
 import cz.zcu.viteja.uur.data.YearCalendarData;
 import cz.zcu.viteja.uur.main.Main;
 import cz.zcu.viteja.uur.views.MonthCalendarView;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -52,14 +52,17 @@ public class YearCalendarGrid {
 
 			sp.getChildren().add(text);
 			sp.setPadding(new Insets(3));
+			sp.setPickOnBounds(true);
 
 			text.getStyleClass().add("month-grid-button");
 
-			text.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 				@Override
-				public void handle(MouseEvent e) {
+				public void handle(ActionEvent e) {
 					// System.out.println("You have clicked on " +
 					// sp.getChildren().get(0).toString());
+
+					System.out.println("TEST2");
 
 					MonthCalendarView monthView = MonthCalendarView.getInstance();
 					monthView.setRenderDate(workYear, dataIndex + 1);
@@ -69,10 +72,17 @@ public class YearCalendarGrid {
 					Main.getInstance().setScene(desiredScene);
 
 				}
-			});
+			};
+
+			text.setOnAction(event);
 
 			if (currentYear == workYear && a < 12 && dataIndex == currentMonth) {
-				sp.setStyle("-fx-background-color: derive(blue, 50%);");
+				// sp.setStyle("-fx-background-color: derive(blue, 50%);");
+				text.getStyleClass().add("month-grid-button-current");
+			}
+
+			if (Main.getInstance().data.hasEvent(workYear, a + 1)) {
+				text.getStyleClass().add("month-grid-button-has-event");
 			}
 
 			this.mainPane.add(sp, columnIndex, rowIndex);

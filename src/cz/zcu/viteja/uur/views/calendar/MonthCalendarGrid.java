@@ -3,6 +3,7 @@ package cz.zcu.viteja.uur.views.calendar;
 import cz.zcu.viteja.uur.data.DateUtils;
 import cz.zcu.viteja.uur.data.MonthCalendarData;
 import cz.zcu.viteja.uur.data.MonthInfo;
+import cz.zcu.viteja.uur.main.Main;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -63,6 +64,7 @@ public class MonthCalendarGrid {
 					text.getStyleClass().add("month-grid-button-not-this-month");
 				} else {
 					text.getStyleClass().add("month-grid-button-this-month");
+
 				}
 
 				sp.getChildren().add(text);
@@ -72,6 +74,20 @@ public class MonthCalendarGrid {
 						&& currentData.equalsIgnoreCase(String.valueOf(DateUtils.getCurrentDay()))
 						&& seda == false /* text.getFill() != Color.GREY */) {
 					text.getStyleClass().add("month-grid-button-current");
+				}
+
+				// Existuje event
+				if (this.isNumeric(currentData) && seda == false) {
+					int yyy = this.workYear;
+					int mmm = this.workMonth;
+					int ddd = Integer.valueOf(currentData);
+
+					boolean isGood = Main.getInstance().data.hasEvent(yyy, mmm, ddd);
+
+					if (isGood) {
+						text.getStyleClass().add("month-grid-button-has-event");
+					}
+
 				}
 
 				this.mainPane.add(sp, b, a);
@@ -95,6 +111,10 @@ public class MonthCalendarGrid {
 
 		return this.mainPane;
 
+	}
+
+	public boolean isNumeric(String s) {
+		return s != null && s.matches("[-+]?\\d*\\.?\\d+");
 	}
 
 }

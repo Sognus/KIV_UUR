@@ -14,6 +14,10 @@ public class DateUtils {
 	public static String[] monthNamesZero = { "Leden", "Únor", "Bøezen", "Duben", "Kvìten", "Èerven", "Èervenec",
 			"Srpen", "Záøí", "Øíjen", "Listopad", "Prosinec" };
 
+	public static String[] dnyVTydnu = { "", "Pondìlí", "Úterý", "Støeda", "Ètvrtek", "Pátek", "Sobota", "Nedìle" };
+
+	public static String[] dnyVTydnu2 = { "Pondìlí", "Úterý", "Støeda", "Ètvrtek", "Pátek", "Sobota", "Nedìle" };
+
 	public static int getCurrentYear() {
 		return cal.get(Calendar.YEAR);
 	}
@@ -62,6 +66,55 @@ public class DateUtils {
 		}
 
 		return sb.toString();
+	}
+
+	public static String getDayOfWeek2(int a) {
+		if (a < 0 || a > 6) {
+			return "<<bad>>";
+		}
+		return dnyVTydnu2[a];
+	}
+
+	public static String getDayOfWeek(int a) {
+		if (a < 1 || a > 7) {
+			return "<<bad>>";
+		}
+		return dnyVTydnu[a];
+	}
+
+	public static String translateDayOfWeek(String s) {
+
+		String navrat = "<<bad>>";
+
+		switch (s) {
+		case "MONDAY":
+			navrat = "Pondìlí";
+			break;
+		case "TUESDAY":
+			navrat = "Úterý";
+			break;
+		case "WEDNESDAY":
+			navrat = "Støeda";
+			break;
+		case "THURSDAY":
+			navrat = "Ètvrtek";
+			break;
+		case "FRIDAY":
+			navrat = "Pátek";
+			break;
+		case "SATURDAY":
+			navrat = "Sobota";
+			break;
+		case "SUNDAY":
+			navrat = "Nedìle";
+			break;
+		default:
+			navrat = "<<bad>>";
+			break;
+
+		}
+
+		return navrat;
 	}
 
 	public static String[] getMonthNames() {

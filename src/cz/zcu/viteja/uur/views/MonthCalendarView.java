@@ -9,9 +9,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class MonthCalendarView extends View {
@@ -23,6 +27,10 @@ public class MonthCalendarView extends View {
 	private BorderPane mainPane;
 	private GridPane mainGrid;
 	private VBox mainBox;
+
+	private Button next;
+	private Button previous;
+	private Button labelButton;
 
 	// Ovládá který mìsíc se bude zobrazovat
 	private int workYear;
@@ -44,7 +52,7 @@ public class MonthCalendarView extends View {
 		this.mainPane.setRight(this.setupRight());
 		this.mainPane.setBottom(this.setupBottom());
 
-		this.scene = new Scene(mainPane, 650, 685);
+		this.scene = new Scene(mainPane, 600, 750);
 
 		return this.scene;
 	}
@@ -52,7 +60,38 @@ public class MonthCalendarView extends View {
 	@Override
 	protected Node setupTop() {
 
-		return null;
+		MenuBar menu = ControlMenu.getControlMenu();
+
+		Menu akce = new Menu("Akce");
+
+		MenuItem currentMonth = new MenuItem("Aktuální mìsíc");
+		currentMonth.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				workYear = DateUtils.getCurrentYear();
+				workMonth = DateUtils.getCurrentMonth();
+
+				GridPane newPane = new MonthCalendarGrid(workYear, workMonth).setup();
+				MonthCalendarView currentInstance = MonthCalendarView.getInstance();
+				currentInstance.mainBox.getChildren().remove(currentInstance.mainGrid);
+				currentInstance.mainGrid = newPane;
+				currentInstance.mainBox.getChildren().add(newPane);
+
+				next.setText(DateUtils.getMonthName(workMonth + 1));
+				previous.setText(DateUtils.getMonthName(workMonth - 1));
+
+				labelButton.setText(String.format("%s %d", DateUtils.getMonthName(currentInstance.workMonth),
+						currentInstance.workYear));
+
+			}
+
+		});
+
+		akce.getItems().addAll(currentMonth);
+		menu.getMenus().add(akce);
+
+		return menu;
 	}
 
 	@Override
@@ -73,16 +112,16 @@ public class MonthCalendarView extends View {
 		this.mainGrid = gp;
 
 		// Label
-		Button labelButton = new Button();
+		labelButton = new Button();
 
 		labelButton.setText(String.format("%s %d", DateUtils.getMonthName(this.workMonth), this.workYear));
 
 		// Tlaèítko - pøedchozí mìsíc
-		Button previous = new Button();
+		previous = new Button();
 		previous.setText(DateUtils.getMonthName(this.workMonth - 1));
 
 		// Tlaèítko - následující mìsíc
-		Button next = new Button();
+		next = new Button();
 		next.setText(DateUtils.getMonthName(this.workMonth + 1));
 
 		previous.setOnAction(new EventHandler<ActionEvent>() {
@@ -162,6 +201,10 @@ public class MonthCalendarView extends View {
 		hBox.getChildren().add(next);
 		hBox.setAlignment(Pos.TOP_CENTER);
 		hBox.setSpacing(25);
+
+		HBox.setHgrow(labelButton, Priority.ALWAYS);
+		HBox.setHgrow(previous, Priority.ALWAYS);
+		HBox.setHgrow(next, Priority.ALWAYS);
 
 		// VBox
 		VBox vBox = new VBox();
