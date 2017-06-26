@@ -48,4 +48,10 @@ public class DayEvent {
 		this.description = s;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%d. %d. %d - %s", this.day, this.month, this.year, this.description);
+
+	}
+
 }

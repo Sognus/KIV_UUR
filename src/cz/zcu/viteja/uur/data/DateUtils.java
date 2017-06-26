@@ -126,6 +126,8 @@ public class DateUtils {
 	}
 
 	public static int getMonthIndexByName(String name) {
+		name = name.replace(" ", "");
+
 		for (int a = 0; a < monthNames.length; a++) {
 			if (name.toLowerCase().equals(monthNames[a].toLowerCase())) {
 				return a;

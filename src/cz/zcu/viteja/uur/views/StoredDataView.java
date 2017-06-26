@@ -74,18 +74,30 @@ public class StoredDataView extends View {
 
 		for (Entry<Integer, YearEvents> yearEntry : Main.getInstance().data.getAllData().entrySet()) {
 			String yearItemName = String.format("%s %d: ", "Rok", yearEntry.getKey());
+
+			if (yearEntry.getValue().isEmpty())
+				continue;
+
 			TreeItem<String> yearItem = new TreeItem<String>(yearItemName);
 			yearItem.setExpanded(false);
 
 			// Mìsíce
 			for (Entry<Integer, MonthEvents> monthEntry : yearEntry.getValue().getMonthEvents().entrySet()) {
 				String monthItemName = (DateUtils.getMonthName(monthEntry.getKey()) + ":").replace(" ", "");
+
+				if (monthEntry.getValue().isEmpty())
+					continue;
+
 				TreeItem<String> monthItem = new TreeItem<String>(monthItemName);
 				monthItem.setExpanded(false);
 
 				// Seskupení dnù
 				for (Entry<Integer, DayEvents> daysEntry : monthEntry.getValue().getDayEvents().entrySet()) {
 					String dayItemName = String.format("%d:", daysEntry.getKey());
+
+					if (daysEntry.getValue().isEmpty())
+						continue;
+
 					TreeItem<String> daysItem = new TreeItem<String>(dayItemName);
 					daysItem.setExpanded(false);
 
@@ -117,6 +129,19 @@ public class StoredDataView extends View {
 		return strom;
 	}
 
+	public static boolean stringContainsItemFromList(String inputStr, String[] items) {
+
+		for (String s : items) {
+
+			if (s.toLowerCase().contains(inputStr.toLowerCase())) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	protected Node setupBottom() {
 
@@ -138,10 +163,14 @@ public class StoredDataView extends View {
 						if (stromoItem.getChildren().size() > 0) {
 							// Nemùžeme smazat prvky které mají v sobe jiné
 							// prvky
-							continue;
+							return;
 						}
 
-						System.out.println(stromoItem.getValue());
+						if (stromoItem.getValue() == "Data" || stromoItem.getValue().toLowerCase().contains("rok")
+								|| stringContainsItemFromList(stromoItem.getValue(), DateUtils.monthNamesZero)) {
+							return;
+
+						}
 
 						TreeItem<String> denMesice = stromoItem.getParent();
 						TreeItem<String> mesicVRoce = denMesice.getParent();
@@ -186,8 +215,6 @@ public class StoredDataView extends View {
 					StoredDataView sdw = StoredDataView.getInstance();
 					Scene s = sdw.setup();
 					Main.getInstance().setScene(s);
-
-					// TODO: smazat ostatní nody v TreeView
 
 				}
 

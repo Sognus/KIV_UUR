@@ -12,8 +12,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class AgendaView extends View {
 
@@ -23,8 +26,12 @@ public class AgendaView extends View {
 
 	private BorderPane mainPane;
 
+	// EDIT WINDOW
+
+	public Stage editStage;
+
 	protected AgendaView() {
-		// TODO Auto-generated constructor stub
+		instance = this;
 	}
 
 	@Override
@@ -66,7 +73,7 @@ public class AgendaView extends View {
 		TableColumn<AgendaEvent, String> hourColumn = new TableColumn<AgendaEvent, String>("Èas");
 		TableColumn<AgendaEvent, String> descColumn = new TableColumn<AgendaEvent, String>("Krátký popis");
 
-		dateColumn.setEditable(false);
+		dateColumn.setEditable(true);
 		dateColumn.setSortable(false);
 		dateColumn.setMinWidth(60);
 		dateColumn.setCellValueFactory(value -> value.getValue().getDateColumn());
@@ -114,6 +121,32 @@ public class AgendaView extends View {
 		// DATARENDER TEST
 
 		table.setItems(data);
+
+		// TABLE ROW EVENT
+
+		table.setRowFactory(tv -> {
+			TableRow<AgendaEvent> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					AgendaEvent rowData = row.getItem();
+					EditFormView form = new EditFormView(rowData);
+
+					editStage = new Stage();
+					Scene scene = form.setup();
+
+					Image image = new Image(Main.class.getResourceAsStream("resources/icon.jpg"));
+					editStage.getIcons().add(image);
+
+					scene.getStylesheets()
+							.add(getClass().getClassLoader().getResource("flat-theme.css").toExternalForm());
+
+					editStage.setTitle("Upravit událost");
+					editStage.setScene(scene);
+					editStage.show();
+				}
+			});
+			return row;
+		});
 
 		return table;
 	}

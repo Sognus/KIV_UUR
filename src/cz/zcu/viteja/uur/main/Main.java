@@ -39,7 +39,10 @@ public class Main extends Application {
 		Scene scene = MonthCalendarView.getInstance().setup();
 
 		File f = new File("resources/flat-theme.css");
-		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+
+		// scene.getStylesheets().add("file:///" +
+		// f.getAbsolutePath().replace("\\", "/"));
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("flat-theme.css").toExternalForm());
 
 		this.primaryStage.setScene(scene);
 		this.primaryStage.setTitle("Plánovaè akcí");
@@ -48,7 +51,13 @@ public class Main extends Application {
 
 		// Icon
 		File iconFile = new File("resources/icon.jpg");
-		Image image = new Image("file:///" + iconFile.getAbsolutePath().replace("\\", "/"));
+
+		//
+
+		// Image image = new Image("file:///" +
+		// iconFile.getAbsolutePath().replace("\\", "/"));
+
+		Image image = new Image(Main.class.getResourceAsStream("resources/icon.jpg"));
 		this.primaryStage.getIcons().add(image);
 
 		setUserAgentStylesheet(STYLESHEET_CASPIAN);
@@ -56,8 +65,14 @@ public class Main extends Application {
 	}
 
 	public void setScene(Scene newScene) {
-		File f = new File("resources/flat-theme.css");
-		newScene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+		newScene.getStylesheets().add(getClass().getClassLoader().getResource("flat-theme.css").toExternalForm());
+
+		Image image = new Image(Main.class.getResourceAsStream("resources/icon.jpg"));
+		this.primaryStage.getIcons().add(image);
+
+		// File f = new File("resources/flat-theme.css");
+		// newScene.getStylesheets().add("file:///" +
+		// f.getAbsolutePath().replace("\\", "/"));
 		this.primaryStage.setScene(newScene);
 
 		this.primaryStage.show();

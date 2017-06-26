@@ -1,5 +1,7 @@
 package cz.zcu.viteja.uur.data;
 
+import java.time.LocalDate;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -65,6 +67,17 @@ public class AgendaEvent {
 
 	public String getShortDescription() {
 		return shortDescription;
+	}
+
+	public LocalDate getDate() {
+
+		int year = Integer.valueOf(this.year);
+		int month = DateUtils.getMonthIndexByName(localizedMonthName);
+		int day = Integer.valueOf(this.numericDayValue);
+
+		LocalDate d = LocalDate.of(year, month, day);
+
+		return d;
 	}
 
 }

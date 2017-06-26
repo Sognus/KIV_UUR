@@ -23,7 +23,10 @@ public class YearEvents {
 	}
 
 	public boolean isEmpty() {
-		return this.monthEvents.isEmpty();
+
+		long l = this.monthEvents.entrySet().stream().filter(test -> !test.getValue().isEmpty()).count();
+
+		return (l < 1);
 	}
 
 	public void removeMonthEvents(int month) {

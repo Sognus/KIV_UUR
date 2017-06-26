@@ -71,7 +71,10 @@ public class DayEvents {
 	}
 
 	public boolean isEmpty() {
-		return dayEvents.isEmpty();
+
+		long l = this.dayEvents.stream().filter(test -> test != null).count();
+
+		return (l < 1);
 	}
 
 	public int getMonthNumber() {

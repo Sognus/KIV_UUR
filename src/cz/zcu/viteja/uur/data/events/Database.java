@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import cz.zcu.viteja.uur.data.AgendaEvent;
+
 public class Database {
 
 	private HashMap<Integer, YearEvents> data;
@@ -17,6 +19,13 @@ public class Database {
 
 	public ArrayList<DayEvent> getDayEventList() {
 		return this.list;
+	}
+
+	public boolean isEmpty() {
+
+		long l = this.data.entrySet().stream().filter(test -> test.getValue().isEmpty()).count();
+
+		return (l < 1);
 	}
 
 	public void addEvent(DayEvent event) {
@@ -85,6 +94,57 @@ public class Database {
 			data.put(year, yearEvents);
 		}
 		return data.get(year);
+	}
+
+	public void removeAgenda(AgendaEvent event) {
+
+		for (Entry<Integer, YearEvents> entryA : this.data.entrySet()) {
+
+			for (Entry<Integer, MonthEvents> entryB : entryA.getValue().getMonthEvents().entrySet()) {
+				for (Entry<Integer, DayEvents> entryC : entryB.getValue().getDayEvents().entrySet()) {
+					ArrayList<DayEvent> evToRemove = new ArrayList<DayEvent>();
+					for (DayEvent de : entryC.getValue().getDayEvents()) {
+
+						// System.out.println("DE: " + de.toString());
+
+						if (de.getYear() != event.getDate().getYear())
+							continue;
+
+						if (de.getMonth() != event.getDate().getMonthValue())
+							continue;
+
+						if (de.getDay() != event.getDate().getDayOfMonth())
+							continue;
+
+						if (de.getDescription() != event.getShortDescription())
+							continue;
+
+						// System.out.println("DE-SMAZ: " + de.toString());
+
+						evToRemove.add(de);
+					}
+
+					ArrayList<DayEvent> dontDeleteDuplikatesTwice = new ArrayList<DayEvent>();
+
+					for (DayEvent ab : evToRemove) {
+						// System.out.println("DE-BEING: " + ab.toString());
+
+						// Když budou dva eventy se stejnými parametry, edituje
+						// se pouze jeden, druhý zùstane
+						if (dontDeleteDuplikatesTwice.contains(ab)) {
+							continue;
+						}
+
+						dontDeleteDuplikatesTwice.add(ab);
+						entryC.getValue().getDayEvents().remove(ab);
+					}
+
+				}
+			}
+
+		}
+
+		this.updateList();
 	}
 
 	public boolean hasEvent(int year, int month, int day) {

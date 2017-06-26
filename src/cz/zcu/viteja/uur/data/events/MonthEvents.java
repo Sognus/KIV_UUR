@@ -25,7 +25,10 @@ public class MonthEvents {
 	}
 
 	public boolean isEmpty() {
-		return dayEvents.isEmpty();
+
+		long l = this.dayEvents.entrySet().stream().filter(test -> !test.getValue().isEmpty()).count();
+
+		return (l < 1);
 	}
 
 	public void removeDayEvents(int day) {
